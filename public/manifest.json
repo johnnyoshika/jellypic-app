@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Jellypic",
+  "name": "Jellypic Photo Sharing",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +8,151 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/786b9e77-2122-8b32-72ab-c3797189bb67.webPlatform.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/0b49a9fc-6bf3-de2f-e43b-d805b3032c4e.webPlatform.png",
+      "sizes": "1240x600",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/cb854f2c-9fba-ebe2-4f72-2ba2e5b19f2d.webPlatform.png",
+      "sizes": "300x300",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/bd39211a-eb13-6600-e6e8-3ae8f0894494.webPlatform.png",
+      "sizes": "150x150",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/8046d377-cad0-d884-6d59-aea91d7babee.webPlatform.png",
+      "sizes": "88x88",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/fa9e8609-6cce-2709-e5f7-9212cab0a145.webPlatform.png",
+      "sizes": "24x24",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/7d05d433-ee96-ddbc-fa00-35649b50fe8c.webPlatform.png",
+      "sizes": "50x50",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/af5d3d8f-f30d-a2aa-e022-cf10b7c66d6d.webPlatform.png",
+      "sizes": "620x300",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/f014a41d-b08e-231e-78d1-10b345d12a24.webPlatform.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/838db4d1-d709-bb56-98e1-37d95ef0ede9.webPlatform.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/9ecdd4f5-40f9-003a-7637-e541976d5ee2.webPlatform.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/eb2d93a7-4eca-3ea8-eb02-9855425fe8ec.webPlatform.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/2dc76c85-b565-5397-9809-beb98c50d820.webPlatform.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/76b7927c-2910-977d-5802-532ccd3b477b.webPlatform.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/0322f7cb-4248-8736-5501-a8135d143de5.webPlatform.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/ee265d9d-8676-8583-251f-c71c5d6fb8c3.webPlatform.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/906b9ed5-50dd-e12b-b193-f1e70e78611c.webPlatform.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/b3c904c9-41a8-368d-5f29-113e91478807.webPlatform.png",
+      "sizes": "76x76",
+      "type": "image/png"
+    },
+    {
+      "src": "ios/ios-launchimage-750-1334.png",
+      "sizes": "750x1334"
+    },
+    {
+      "src": "ios/ios-launchimage-1334-750.png",
+      "sizes": "1334x750"
+    },
+    {
+      "src": "ios/ios-launchimage-1242-2208.png",
+      "sizes": "1242x2208"
+    },
+    {
+      "src": "ios/ios-launchimage-2208-1242.png",
+      "sizes": "2208x1242"
+    },
+    {
+      "src": "ios/ios-launchimage-640-960.png",
+      "sizes": "640x960"
+    },
+    {
+      "src": "ios/ios-launchimage-640-1136.png",
+      "sizes": "640x1136"
+    },
+    {
+      "src": "ios/ios-launchimage-1536-2048.png",
+      "sizes": "1536x2048"
+    },
+    {
+      "src": "ios/ios-launchimage-2048-1536.png",
+      "sizes": "2048x1536"
+    },
+    {
+      "src": "ios/ios-launchimage-768-1024.png",
+      "sizes": "768x1024"
+    },
+    {
+      "src": "ios/ios-launchimage-1024-768.png",
+      "sizes": "1024x768"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "any",
+  "lang": ""
 }

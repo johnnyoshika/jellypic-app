@@ -17,7 +17,13 @@ const httpLink = new HttpLink({
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) console.log('graphQLErrors', graphQLErrors);
+  if (graphQLErrors) {
+    for (const err of graphQLErrors) {
+      if (err.extensions && err.extensions.code === 'authorization')
+        console.log('TODO: show login');
+      else console.log(`${err.extensions.code} error`);
+    }
+  }
 
   if (networkError) console.log('networkError', networkError);
 });

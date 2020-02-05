@@ -14,6 +14,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+const cache = new InMemoryCache();
+cache.writeData({
+  data: {
+    isLoggedIn: !!localStorage.getItem('loggedInUserId'),
+  },
+});
+
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,
 });
@@ -21,9 +28,16 @@ const httpLink = new HttpLink({
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      if (err.extensions && err.extensions.code === 'authorization')
-        console.log('TODO: show login');
-      else console.log(`${err.extensions.code} error`);
+      if (err.extensions && err.extensions.code === 'authorization') {
+        localStorage.remnoveItem('loggedInUserId');
+        cache.writeData({
+          data: {
+            isLoggedIn: false,
+          },
+        });
+      } else if (err.extensions)
+        console.log(`${err.extensions.code} error`);
+      else console.log(`graphQLErrors: ${graphQLErrors}`);
     }
   }
 
@@ -31,8 +45,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const link = ApolloLink.from([errorLink, httpLink]);
-
-const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   link,

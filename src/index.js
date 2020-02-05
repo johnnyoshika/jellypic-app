@@ -23,6 +23,7 @@ cache.writeData({
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,
+  credentials: 'include',
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

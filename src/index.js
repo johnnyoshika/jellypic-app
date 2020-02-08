@@ -15,11 +15,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const cache = new InMemoryCache();
-cache.writeData({
-  data: {
-    isLoggedIn: !!localStorage.getItem('loggedInUserId'),
-  },
-});
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,
@@ -30,7 +25,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       if (err.extensions && err.extensions.code === 'authorization') {
-        localStorage.remnoveItem('loggedInUserId');
         cache.writeData({
           data: {
             isLoggedIn: false,

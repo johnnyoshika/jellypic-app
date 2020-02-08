@@ -17,7 +17,6 @@ const Login = () => {
   const client = useApolloClient();
   const [login, { loading, error }] = useMutation(LOGIN_USER, {
     onCompleted({ login }) {
-      localStorage.setItem('loggedInUserId', login.me.id);
       client
         .resetStore()
         .then(() => client.writeData({ data: { isLoggedIn: true } }));

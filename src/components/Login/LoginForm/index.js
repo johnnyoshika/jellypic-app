@@ -32,15 +32,18 @@ const ensureFacebookSdkLoaded = callback => {
 const LoginForm = ({ login, loading, error }) => {
   const [checking, setChecking] = useState(true);
 
+  const loginWithToken = accessToken =>
+    login({
+      variables: {
+        accessToken,
+      },
+    }).catch(() => setChecking(false)); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963
+
   useEffect(() => {
     ensureFacebookSdkLoaded(() => {
       window.FB.getLoginStatus(response => {
         if (response.status === 'connected')
-          login({
-            variables: {
-              accessToken: response.authResponse.accessToken,
-            },
-          });
+          loginWithToken(response.authResponse.accessToken);
         else setChecking(false);
       });
     });
@@ -49,11 +52,7 @@ const LoginForm = ({ login, loading, error }) => {
   const loginWithFacebook = () => {
     window.FB.login(response => {
       if (response.status === 'connected')
-        login({
-          variables: {
-            accessToken: response.authResponse.accessToken,
-          },
-        });
+        loginWithToken(response.authResponse.accessToken);
     });
   };
 

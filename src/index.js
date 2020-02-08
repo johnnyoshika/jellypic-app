@@ -8,6 +8,8 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
+import { UserProvider } from 'context/user-context';
+
 import { typeDefs, resolvers } from 'schema/resolvers';
 
 import './index.css';
@@ -50,7 +52,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 );

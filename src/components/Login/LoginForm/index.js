@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Error from 'components/Error';
 
 import './style.css';
@@ -32,27 +32,31 @@ const ensureFacebookSdkLoaded = callback => {
 const LoginForm = ({ login, loading, error }) => {
   const [checking, setChecking] = useState(true);
 
-  const loginWithToken = accessToken =>
-    login({
-      variables: {
-        accessToken,
-      },
-    }).catch(() => setChecking(false)); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963
+  const memoizedCallback = useCallback(
+    accessToken => {
+      login({
+        variables: {
+          accessToken,
+        },
+      }).catch(() => setChecking(false)); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963
+    },
+    [login],
+  );
 
   useEffect(() => {
     ensureFacebookSdkLoaded(() => {
       window.FB.getLoginStatus(response => {
         if (response.status === 'connected')
-          loginWithToken(response.authResponse.accessToken);
+          memoizedCallback(response.authResponse.accessToken);
         else setChecking(false);
       });
     });
-  }, [loginWithToken]);
+  }, [memoizedCallback]);
 
   const loginWithFacebook = () => {
     window.FB.login(response => {
       if (response.status === 'connected')
-        loginWithToken(response.authResponse.accessToken);
+        memoizedCallback(response.authResponse.accessToken);
     });
   };
 

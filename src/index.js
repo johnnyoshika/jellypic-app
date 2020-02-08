@@ -8,6 +8,8 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
+import { UserProvider } from 'context/user-context';
+
 import { typeDefs, resolvers } from 'schema/resolvers';
 
 import './index.css';
@@ -17,7 +19,7 @@ import * as serviceWorker from './serviceWorker';
 const cache = new InMemoryCache();
 cache.writeData({
   data: {
-    isLoggedIn: !!localStorage.getItem('loggedInUserId'),
+    isLoggedIn: true, // presume logged in
   },
 });
 
@@ -30,7 +32,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       if (err.extensions && err.extensions.code === 'authorization') {
-        localStorage.remnoveItem('loggedInUserId');
         cache.writeData({
           data: {
             isLoggedIn: false,
@@ -56,7 +57,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 );

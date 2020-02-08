@@ -47,7 +47,7 @@ const LoginForm = ({ login, loading, error }) => {
         else setChecking(false);
       });
     });
-  }, [login]);
+  }, [loginWithToken]);
 
   const loginWithFacebook = () => {
     window.FB.login(response => {

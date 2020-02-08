@@ -17,6 +17,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const cache = new InMemoryCache();
+cache.writeData({
+  data: {
+    isLoggedIn: true, // presume logged in
+  },
+});
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,

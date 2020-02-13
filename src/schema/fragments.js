@@ -10,3 +10,30 @@ export const USER_FRAGMENT = gql`
     pictureUrl
   }
 `;
+
+export const POST_FRAGMENT = gql`
+  fragment post on Post {
+    id
+    createdAt
+    cloudinaryPublicId
+    user {
+      ...user
+    }
+    comments {
+      id
+      text
+      createdAt
+      user {
+        ...user
+      }
+    }
+    likes {
+      id
+      createdAt
+      user {
+        ...user
+      }
+    }
+  }
+  ${USER_FRAGMENT}
+`;

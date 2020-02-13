@@ -5,7 +5,7 @@ import {
   Link,
   NavLink,
 } from 'react-router-dom';
-import { useUser } from 'context/user-context';
+import { useMe } from 'context/user-context';
 import Uploader from 'components/Uploader';
 import Home from './Home';
 import Post from './Post';
@@ -15,7 +15,7 @@ import User from './User';
 import './style.css';
 
 const Dashboard = ({ history }) => {
-  const user = useUser();
+  const me = useMe();
 
   return (
     <Router>
@@ -57,7 +57,7 @@ const Dashboard = ({ history }) => {
               </div>
               <div>
                 <NavLink
-                  to={'/users/' + user.id}
+                  to={'/users/' + me.id}
                   activeClassName="nav-active"
                 >
                   <i

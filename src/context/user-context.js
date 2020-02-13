@@ -3,10 +3,10 @@ import React, { useContext, useState } from 'react';
 const UserContext = React.createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [me, setMe] = useState(null);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ me, setMe }}>
       {children}
     </UserContext.Provider>
   );
@@ -15,12 +15,12 @@ const UserProvider = ({ children }) => {
 const useUserContext = () => {
   const context = useContext(UserContext);
   if (context === undefined)
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error('useMe must be used within a UserProvider');
 
   return context;
 };
 
-const useUser = () => useUserContext().user;
-const useSetUser = () => useUserContext().setUser;
+const useMe = () => useUserContext().me;
+const useSetMe = () => useUserContext().setMe;
 
-export { UserProvider, useUser, useSetUser };
+export { UserProvider, useMe, useSetMe };

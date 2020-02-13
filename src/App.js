@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
-import { useUser } from 'context/user-context';
+import { useMe } from 'context/user-context';
 import Loading from 'components/Loading';
 import Login from 'components/Login';
 import Session from 'components/Session';
@@ -15,12 +15,12 @@ const IS_LOGGED_IN = gql`
 
 const App = () => {
   const { data } = useQuery(IS_LOGGED_IN);
-  const user = useUser();
+  const me = useMe();
   if (!data) return <Loading />;
 
   if (!data.isLoggedIn) return <Login />;
 
-  return user ? <Dashboard /> : <Session />;
+  return me ? <Dashboard /> : <Session />;
 };
 
 export default App;

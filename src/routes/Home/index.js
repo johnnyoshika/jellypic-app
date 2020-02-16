@@ -8,19 +8,58 @@ import Card from 'components/Card';
 import './style.css';
 
 const Home = () => {
-  const { data, loading, error } = useQuery(GET_POSTS);
+  const { data, loading, error, fetchMore } = useQuery(GET_POSTS, {
+    notifyOnNetworkStatusChange: true,
+  });
 
-  if (error) return <Error error={error}></Error>;
+  const posts = data ? data.posts : { nodes: [], pageInfo: {} };
 
-  if (loading && !data) return <Loading />;
-
+  const loadMore = () => {
+    fetchMore({
+      variables: {
+        after: data.posts.pageInfo.endCursor,
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => ({
+        ...previousResult,
+        posts: {
+          ...previousResult.posts,
+          pageInfo: {
+            ...previousResult.posts.pageInfo,
+            endCursor: fetchMoreResult.posts.pageInfo.endCursor,
+            hasNextPage: fetchMoreResult.posts.pageInfo.hasNextPage,
+          },
+          nodes: [
+            ...previousResult.posts.nodes,
+            ...fetchMoreResult.posts.nodes,
+          ],
+        },
+      }),
+    }).catch(() => {}); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963;
+  };
   return (
     <div className="home-container">
       <div className="gutter" />
       <div className="home-main">
-        {data.posts.nodes.map(post => (
+        {posts.nodes.map(post => (
           <Card key={post.id} post={post} />
         ))}
+        {loading ? (
+          <Loading />
+        ) : (
+          [
+            posts.pageInfo.hasNextPage && (
+              <div key="0" className="text-center">
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={loadMore}
+                >
+                  Load more...
+                </button>
+              </div>
+            ),
+            error && <Error key="1" error={error}></Error>,
+          ]
+        )}
       </div>
       <div className="gutter" />
     </div>

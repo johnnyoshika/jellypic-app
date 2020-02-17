@@ -2,6 +2,7 @@ import React from 'react';
 import Comment from './Comment';
 import AddComment from './AddComment';
 import { Link } from 'react-router-dom';
+import { Image } from 'cloudinary-react';
 
 import './style.css';
 import { useMe } from 'context/user-context';
@@ -36,7 +37,16 @@ const Card = ({ post }) => {
         </div>
       </div>
       <div className="card-photo">
-        <div className="text-center">{post.cloudinaryPublicId}</div>
+        <Image
+          className="image-100"
+          crossOrigin="anonymous"
+          cloudName={process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}
+          publicId={post.cloudinaryPublicId}
+          crop="fit"
+          height="600"
+          width="600"
+          secure
+        />
       </div>
       <div className="card-info">
         <div className="card-info-likes">

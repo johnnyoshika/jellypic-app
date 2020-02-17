@@ -3,6 +3,7 @@ import Comment from './Comment';
 import AddComment from './AddComment';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
+import Moment from 'react-moment';
 
 import './style.css';
 import { useMe } from 'context/user-context';
@@ -33,7 +34,14 @@ const Card = ({ post }) => {
           </div>
         </div>
         <div className="card-heading-time text-right">
-          <Link to={'/posts/' + post.id}>{post.createdAt}</Link>
+          <Link to={'/posts/' + post.id}>
+            <Moment
+              format="MMM d, YYYY"
+              fromNowDuring={1000 * 3600 * 24 * 30}
+            >
+              {post.createdAt}
+            </Moment>
+          </Link>
         </div>
       </div>
       <div className="card-photo">

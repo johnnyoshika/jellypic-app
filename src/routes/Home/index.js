@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
 import { GET_POSTS } from 'schema/queries';
@@ -12,12 +13,18 @@ const Home = () => {
     notifyOnNetworkStatusChange: true,
   });
 
+  const [setFetching] = useInfiniteScroll({
+    loadMore: () => loadMore(),
+  });
+
   const posts = data ? data.posts : { nodes: [], pageInfo: {} };
 
   const loadMore = () => {
+    if (!posts.pageInfo.hasNextPage) return;
+
     fetchMore({
       variables: {
-        after: data.posts.pageInfo.endCursor,
+        after: posts.pageInfo.endCursor,
       },
       updateQuery: (previousResult, { fetchMoreResult }) => ({
         ...previousResult,
@@ -34,8 +41,13 @@ const Home = () => {
           ],
         },
       }),
-    }).catch(() => {}); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963;
+    })
+      .catch(() => {}) // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963;
+      .finally(() => {
+        setFetching(false);
+      });
   };
+
   return (
     <div className="home-container">
       <div className="gutter" />
@@ -46,19 +58,7 @@ const Home = () => {
         {loading ? (
           <Loading />
         ) : (
-          [
-            posts.pageInfo.hasNextPage && (
-              <div key="0" className="text-center">
-                <button
-                  className="btn btn-primary btn-lg"
-                  onClick={loadMore}
-                >
-                  Load more...
-                </button>
-              </div>
-            ),
-            error && <Error key="1" error={error}></Error>,
-          ]
+          error && <Error key="1" error={error}></Error>
         )}
       </div>
       <div className="gutter" />

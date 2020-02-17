@@ -4,17 +4,57 @@ import AddComment from './AddComment';
 import { Link } from 'react-router-dom';
 import { Image } from 'cloudinary-react';
 import Moment from 'react-moment';
+import { useMe } from 'context/user-context';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
+import { POST_FRAGMENT } from 'schema/fragments';
 
 import './style.css';
-import { useMe } from 'context/user-context';
+
+const ADD_LIKE = gql`
+  mutation addLike($input: AddLikeInput!) {
+    addLike(input: $input) {
+      post {
+        ...post
+      }
+    }
+  }
+  ${POST_FRAGMENT}
+`;
 
 const Card = ({ post }) => {
   const me = useMe();
 
+  const [addLike] = useMutation(ADD_LIKE, {
+    variables: {
+      input: {
+        postId: post.id,
+      },
+    },
+    optimisticResponse: {
+      addLike: {
+        __typename: 'AddLikePayload',
+        post: {
+          __typename: 'Post',
+          ...post,
+          likes: [
+            ...post.likes,
+            {
+              __typename: 'Like',
+              id: '_' + Math.round(Math.random() * 1000000),
+              createdAt: new Date(),
+              user: me,
+            },
+          ],
+        },
+      },
+    },
+  });
+
   const likedByMe = () =>
     post.likes.some(like => like.user.id === me.id);
 
-  const toggleLike = () => {};
+  const toggleLike = () => (likedByMe() ? null : addLike());
 
   return (
     <div className="card">

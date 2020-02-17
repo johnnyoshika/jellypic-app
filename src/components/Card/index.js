@@ -22,6 +22,17 @@ const ADD_LIKE = gql`
   ${POST_FRAGMENT}
 `;
 
+const REMOVE_LIKE = gql`
+  mutation removeLike($input: RemoveLikeInput!) {
+    removeLike(input: $input) {
+      post {
+        ...post
+      }
+    }
+  }
+  ${POST_FRAGMENT}
+`;
+
 const Card = ({ post }) => {
   const me = useMe();
 
@@ -51,10 +62,28 @@ const Card = ({ post }) => {
     },
   });
 
+  const [removeLike] = useMutation(REMOVE_LIKE, {
+    variables: {
+      input: {
+        postId: post.id,
+      },
+    },
+    optimisticResponse: {
+      removeLike: {
+        __typename: 'RemoveLikePayload',
+        post: {
+          __typename: 'Post',
+          ...post,
+          likes: post.likes.filter(l => l.user.id !== me.id),
+        },
+      },
+    },
+  });
+
   const likedByMe = () =>
     post.likes.some(like => like.user.id === me.id);
 
-  const toggleLike = () => (likedByMe() ? null : addLike());
+  const toggleLike = () => (likedByMe() ? removeLike() : addLike());
 
   return (
     <div className="card">

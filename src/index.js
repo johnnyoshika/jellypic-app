@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { getMainDefinition } from 'apollo-utilities';
 
 import { UserProvider } from 'context/user-context';
 
@@ -46,7 +48,26 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log('networkError', networkError);
 });
 
-const link = ApolloLink.from([errorLink, httpLink]);
+const httpWithErrorLink = ApolloLink.from([errorLink, httpLink]);
+
+const wsLink = new WebSocketLink({
+  uri: `${process.env.REACT_APP_WS_ORIGIN}/graphql`,
+  options: {
+    reconnect: true,
+  },
+});
+
+const link = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink, // route here for subscription operations
+  httpWithErrorLink, // route here for everything else (e.g. query and mutation)
+);
 
 const client = new ApolloClient({
   link,

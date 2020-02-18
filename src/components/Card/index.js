@@ -6,11 +6,22 @@ import { Image } from 'cloudinary-react';
 import Moment from 'react-moment';
 import { useMe } from 'context/user-context';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import { POST_FRAGMENT } from 'schema/fragments';
 import { toast } from 'react-toastify';
 
 import './style.css';
+
+const POST_UPDATED = gql`
+  subscription postUpdated($id: ID!) {
+    postUpdated(id: $id) {
+      post {
+        ...post
+      }
+    }
+  }
+  ${POST_FRAGMENT}
+`;
 
 const ADD_LIKE = gql`
   mutation addLike($input: AddLikeInput!) {
@@ -36,6 +47,12 @@ const REMOVE_LIKE = gql`
 
 const Card = ({ post }) => {
   const me = useMe();
+
+  useSubscription(POST_UPDATED, {
+    variables: {
+      id: post.id,
+    },
+  });
 
   const [addLike] = useMutation(ADD_LIKE, {
     variables: {

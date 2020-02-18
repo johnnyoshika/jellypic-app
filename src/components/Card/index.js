@@ -155,7 +155,7 @@ const Card = ({ post }) => {
             </button>
           </div>
           <div>
-            <AddComment postId={post.id} />
+            <AddComment post={post} />
           </div>
         </div>
       </div>

@@ -135,11 +135,7 @@ const Card = ({ post }) => {
         </div>
         <div className="card-info-comments">
           {post.comments.map(comment => (
-            <Comment
-              key={comment.id}
-              postId={post.id}
-              comment={comment}
-            />
+            <Comment key={comment.id} post={post} comment={comment} />
           ))}
         </div>
         <div className="card-info-add-comment">

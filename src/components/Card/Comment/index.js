@@ -1,10 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useMe } from 'context/user-context';
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { POST_FRAGMENT } from 'schema/fragments';
+import { toast } from 'react-toastify';
 
-const Comment = ({ postId, comment }) => {
+const REMOVE_COMMENT = gql`
+  mutation removeComment($input: RemoveCommentInput!) {
+    removeComment(input: $input) {
+      post {
+        ...post
+      }
+    }
+  }
+  ${POST_FRAGMENT}
+`;
+
+const Comment = ({ post, comment }) => {
   const me = useMe();
-  const deleteComment = () => {};
+
+  const [removeComment] = useMutation(REMOVE_COMMENT, {
+    variables: {
+      input: {
+        id: comment.id,
+      },
+    },
+    optimisticResponse: {
+      removeComment: {
+        __typename: 'RemoveCommentPayload',
+        post: {
+          __typename: 'Post',
+          ...post,
+          comments: post.comments.filter(c => c.id !== comment.id),
+        },
+      },
+    },
+  });
+
+  const onRemoveClick = () =>
+    removeComment().catch(error => toast.error(error.message));
 
   return (
     <div className="card-info-comment">
@@ -17,7 +52,7 @@ const Comment = ({ postId, comment }) => {
         <div className="pull-right">
           <button
             className="button-link"
-            onClick={() => deleteComment()}
+            onClick={() => onRemoveClick()}
           >
             <i className="fa fa-times-circle" aria-hidden="true" />
           </button>

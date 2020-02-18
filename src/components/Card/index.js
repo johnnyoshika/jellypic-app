@@ -8,6 +8,7 @@ import { useMe } from 'context/user-context';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import { POST_FRAGMENT } from 'schema/fragments';
+import { toast } from 'react-toastify';
 
 import './style.css';
 
@@ -83,7 +84,10 @@ const Card = ({ post }) => {
   const likedByMe = () =>
     post.likes.some(like => like.user.id === me.id);
 
-  const toggleLike = () => (likedByMe() ? removeLike() : addLike());
+  const toggleLike = () =>
+    (likedByMe() ? removeLike : addLike)().catch(error =>
+      toast.error(error.message),
+    );
 
   return (
     <div className="card">

@@ -4,12 +4,19 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
 import { GET_POSTS } from 'schema/queries';
+import { POSTS_ADDED } from 'schema/subscriptions';
 import Card from 'components/Card';
 
 import './style.css';
 
 const Home = () => {
-  const { data, loading, error, fetchMore } = useQuery(GET_POSTS, {
+  const {
+    data,
+    loading,
+    error,
+    fetchMore,
+    subscribeToMore,
+  } = useQuery(GET_POSTS, {
     notifyOnNetworkStatusChange: true,
   });
 
@@ -18,6 +25,29 @@ const Home = () => {
   });
 
   const posts = data ? data.posts : { nodes: [], pageInfo: {} };
+
+  subscribeToMore({
+    document: POSTS_ADDED,
+    updateQuery: (prev, { subscriptionData }) => {
+      if (!prev || !subscriptionData.data) return prev;
+      const postsAdded = subscriptionData.data.postsAdded;
+
+      return {
+        ...prev,
+        posts: {
+          ...prev.posts,
+          nodes: [
+            ...postsAdded
+              .map(pa => pa.post)
+              .filter(
+                p => !prev.posts.nodes.map(n => n.id).includes(p.id),
+              ),
+            ...prev.posts.nodes,
+          ],
+        },
+      };
+    },
+  });
 
   const loadMore = () => {
     if (!posts.pageInfo.hasNextPage) return;

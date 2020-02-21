@@ -12,8 +12,8 @@ export const GET_USER = gql`
 `;
 
 export const GET_POSTS = gql`
-  query getPosts($after: Int) {
-    posts(after: $after) {
+  query getPosts($userId: ID, $after: Int) {
+    posts(userId: $userId, after: $after) {
       pageInfo {
         endCursor
         hasNextPage

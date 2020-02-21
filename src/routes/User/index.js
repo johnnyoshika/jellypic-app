@@ -1,5 +1,6 @@
 import React from 'react';
 import Profile from './Profile';
+import Posts from './Posts';
 
 import './style.css';
 
@@ -13,6 +14,7 @@ const User = ({
       <div className="gutter" />
       <div className="profile-main">
         <Profile id={id} />
+        <Posts id={id} />
       </div>
       <div className="gutter" />
     </div>

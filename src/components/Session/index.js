@@ -1,22 +1,15 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { useSetMe } from 'context/user-context';
-import { USER_FRAGMENT } from 'schema/fragments';
+import { GET_USER } from 'schema/queries';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
 
-const GET_ME = gql`
-  query getMe {
-    user(id: "me") {
-      ...user
-    }
-  }
-  ${USER_FRAGMENT}
-`;
-
 const Session = () => {
-  const { data, loading, error, refetch } = useQuery(GET_ME, {
+  const { data, loading, error, refetch } = useQuery(GET_USER, {
+    variables: {
+      id: 'me',
+    },
     notifyOnNetworkStatusChange: true,
   });
   const setMe = useSetMe();

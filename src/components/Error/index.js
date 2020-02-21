@@ -2,9 +2,9 @@ import React from 'react';
 
 const Error = ({ error, children }) => {
   return (
-    <div className="text-center">
+    <div className="text-center mt-20 mb-20">
       <div className="error">{error.toString()}</div>
-      <div>{children}</div>
+      {children && <div className="mt-20 mb-20">{children}</div>}
     </div>
   );
 };

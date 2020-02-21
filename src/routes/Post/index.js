@@ -12,13 +12,23 @@ const Post = ({
     params: { id },
   },
 }) => {
-  const { data, loading, error } = useQuery(GET_POST, {
+  const { data, loading, error, refetch } = useQuery(GET_POST, {
     variables: {
       id,
     },
+    notifyOnNetworkStatusChange: true,
   });
 
-  if (error) return <Error error={error} />;
+  const retry = () => refetch().catch(() => {}); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963
+
+  if (error)
+    return (
+      <Error error={error}>
+        <button className="btn btn-primary" onClick={retry}>
+          Try again!
+        </button>
+      </Error>
+    );
 
   return (
     <div className="post-container">

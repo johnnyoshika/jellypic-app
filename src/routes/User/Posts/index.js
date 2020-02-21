@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image } from 'cloudinary-react';
 import InfinitePosts from 'components/InfinitePosts';
+import { Image } from 'cloudinary-react';
 import { Link } from 'react-router-dom';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
@@ -35,7 +35,7 @@ const Posts = ({ id }) => {
             <Loading />
           ) : (
             error && (
-              <Error key="1" error={error}>
+              <Error error={error}>
                 <button className="btn btn-primary" onClick={retry}>
                   Try again!
                 </button>

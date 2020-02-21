@@ -20,7 +20,7 @@ const Home = () => {
               <Loading />
             ) : (
               error && (
-                <Error key="1" error={error}>
+                <Error error={error}>
                   <button className="btn btn-primary" onClick={retry}>
                     Try again!
                   </button>

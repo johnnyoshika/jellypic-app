@@ -14,6 +14,7 @@ const Home = () => {
     data,
     loading,
     error,
+    refetch,
     fetchMore,
     subscribeToMore,
   } = useQuery(GET_POSTS, {
@@ -25,6 +26,8 @@ const Home = () => {
   });
 
   const posts = data ? data.posts : { nodes: [], pageInfo: {} };
+
+  const retry = () => refetch().catch(() => {}); // Unless we catch, a network error will cause an unhandled rejection: https://github.com/apollographql/apollo-client/issues/3963
 
   subscribeToMore({
     document: POSTS_ADDED,
@@ -88,7 +91,13 @@ const Home = () => {
         {loading ? (
           <Loading />
         ) : (
-          error && <Error key="1" error={error}></Error>
+          error && (
+            <Error key="1" error={error}>
+              <button className="btn btn-primary" onClick={retry}>
+                Try again!
+              </button>
+            </Error>
+          )
         )}
       </div>
       <div className="gutter" />

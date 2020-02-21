@@ -26,11 +26,9 @@ const Session = () => {
   if (error)
     return (
       <Error error={error}>
-        <div>
-          <button className="btn btn-primary" onClick={retry}>
-            Try again!
-          </button>
-        </div>
+        <button className="btn btn-primary" onClick={retry}>
+          Try again!
+        </button>
       </Error>
     );
 

@@ -53,3 +53,11 @@ export const POST_FRAGMENT = gql`
   ${COMMENT_FRAGMENT}
   ${LIKE_FRAGMENT}
 `;
+
+export const SUBSCRIPTION_FRAGMENT = gql`
+  fragment subscription on Subscription {
+    id
+    createdAt
+    endpoint
+  }
+`;

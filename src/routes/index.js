@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,8 +14,29 @@ import User from './User';
 
 import './style.css';
 
-const Dashboard = ({ history }) => {
+const Dashboard = () => {
   const me = useMe();
+  const [uploadState, setUploadState] = useState('idle');
+  const [uploadError, setUploadError] = useState(null);
+
+  const renderUploaderStatus = () => {
+    if (uploadState === 'idle') return null;
+
+    return (
+      <div className="uploader-state">
+        <div className="gutter" />
+        <div className="uploader-state-content">
+          {uploadState === 'error' && (
+            <div className="error">Error: {uploadError}</div>
+          )}
+          {uploadState === 'saving' && (
+            <div className="progress">Finishing up...</div>
+          )}
+        </div>
+        <div className="gutter" />
+      </div>
+    );
+  };
 
   return (
     <Router>
@@ -37,7 +58,10 @@ const Dashboard = ({ history }) => {
                 </NavLink>
               </div>
               <div>
-                <Uploader history={history}>
+                <Uploader
+                  setUploadState={setUploadState}
+                  setUploadError={setUploadError}
+                >
                   <i
                     className="fa fa-cloud-upload fa-2x"
                     aria-hidden="true"
@@ -70,6 +94,7 @@ const Dashboard = ({ history }) => {
           </div>
           <div className="gutter" />
         </div>
+        {renderUploaderStatus()}
         <>
           <Route exact path="/" component={Home} />
           <Route path="/posts/:id" component={Post} />

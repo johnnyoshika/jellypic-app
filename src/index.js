@@ -16,7 +16,6 @@ import { typeDefs, resolvers } from 'schema/resolvers';
 
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
 const cache = new InMemoryCache();
 cache.writeData({
@@ -85,7 +84,11 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+if (process.env.NODE_ENV === 'production') {
+  if ('serviceWorker' in navigator) {
+    // Use the window load event to keep the page load performant
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+}

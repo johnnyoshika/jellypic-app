@@ -83,3 +83,46 @@ workbox.routing.registerRoute(
 
 // make sure 'index.html' is pre-cached, otherwise we'll see a 'an object that was not a Response was passed to respondWith()' error in Console and page won't load.
 workbox.routing.registerNavigationRoute('/index.html');
+
+self.addEventListener('push', e => {
+  var payload = e.data.json();
+  e.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.message,
+      icon: payload.icon,
+      image: payload.image,
+      badge: '/icons/android-chrome-192x192.png',
+      data: payload,
+      actions: [
+        {
+          action: 'view',
+          title: 'View Post',
+          icon: '/icons/picture-128x128.png',
+        },
+        {
+          action: 'app',
+          title: 'Open App',
+          icon: '/icons/android-chrome-192x192.png',
+        },
+      ],
+    }),
+  );
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  var payload = e.notification.data;
+
+  switch (e.action) {
+    case 'app':
+      e.waitUntil(clients.openWindow(e.target.location.origin));
+      break;
+    case 'view':
+    default:
+      e.waitUntil(
+        clients.openWindow(
+          `${e.target.location.origin}/posts/${payload.postId}`,
+        ),
+      );
+  }
+});

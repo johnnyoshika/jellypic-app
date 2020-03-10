@@ -122,6 +122,7 @@ const Subscription = () => {
   };
 
   const subscribe = () => {
+    setResult('loading');
     navigator.serviceWorker.ready.then(registration => {
       registration.pushManager
         .subscribe({
@@ -149,6 +150,7 @@ const Subscription = () => {
   };
 
   const unsubscribe = () => {
+    setResult('loading');
     navigator.serviceWorker.ready.then(registration => {
       registration.pushManager
         .getSubscription()

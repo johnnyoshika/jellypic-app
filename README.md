@@ -1,68 +1,54 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Jellypic Client
 
-## Available Scripts
+Jellypic is a sample app to demonstrate the capabilities of Progressive Web Apps, including:
+* Offline first readonly in:
+  * Chrome, Firefox, Opera
+  * Edge on Windows 10 1803+
+  * Safari 11.1+ (iOS 11.3+ and macOS 10.13.4+)
+* Saving changes with intermittent internet will be attempted 5 times, but committing changes will require online access
+* Push notifications on:
+  * Chrome on Android
+  * Chrome on Windows
+  * Chrome on macOS
 
-In the project directory, you can run:
+Project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app) and uses the following technologies:
+* Service Worker
+* Push API
+* React.js
+* Apollo Client (for GraphQL requests)
+* CSS Grid
 
-### `npm start`
+## Setup
+* `git clone {repository url}`
+* `cd` into new directory
+* use Node version 8.X (e.g. 8.17.0)
+* `npm install`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Development
+* Make sure [Backend Server](https://github.com/johnnyoshika/jellypic) is running
+* `npm start`
+* Navigate to: [http://localhost:3000/](http://localhost:3000/)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## HTTPS and Facebook Login
+* Facebook only allows login from HTTPS pages.
+* To serve pages over HTTPS, start server after [setting HTTPS environment variable](https://create-react-app.dev/docs/using-https-in-development/):
+  * Windows (cmd.exe): `set HTTPS=true&&npm start`
+  * Windows (Powershell): `($env:HTTPS = "true") -and (npm start)`
+  * Linux, macOS (Bash): `HTTPS=true npm start`
+* Server will use a self-signed certificate, so web browser will almost definitely display a warning
+* Once you log in with Facebook and proper authentication cookie has been set by the API, then you can revert back to non-secure HTTP. Remember that you need to close the shell and start a new session to clear out the env variable.
 
-### `npm test`
+## Build for Production
+* `npm run build`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Remote Debugging with Android Device
+* Follow instructions here to connect my Samsung S7 with my desktop's Chrome Dev Tools: https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
+* I had trouble getting Chrome's Dev Tools to recognize my device. I installed and uninstalled Samsung's USB Driver for Windows from here: http://developer.samsung.com/galaxy/others/android-usb-driver-for-windows and then it started working. I documented this here: https://stackoverflow.com/a/48625119/188740
+* Set device USB options and select:
+  * `Connecting MIDI devices`
+* In the `Remote devices` tab of Chrome Dev Tools, add this port forwarding rule:
+  * `3000` --> `localhost:3000`
+* Now our Samsung S7 device can run our app with url `http://localhost:3000`
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Deployment
+Coming soon...

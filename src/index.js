@@ -9,6 +9,7 @@ import { RetryLink } from 'apollo-link-retry';
 import { WebSocketLink } from 'apollo-link-ws';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { persistCache } from 'apollo-cache-persist';
 import { getMainDefinition } from 'apollo-utilities';
 
 import { UserProvider } from 'context/user-context';
@@ -23,6 +24,11 @@ cache.writeData({
   data: {
     isLoggedIn: true, // presume logged in
   },
+});
+
+const waitOnCache = persistCache({
+  cache,
+  storage: window.localStorage,
 });
 
 const retryLink = new RetryLink({
@@ -86,14 +92,16 @@ const client = new ApolloClient({
   resolvers,
 });
 
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <UserProvider>
-      <App />
-    </UserProvider>
-  </ApolloProvider>,
-  document.getElementById('root'),
-);
+waitOnCache.then(() => {
+  ReactDOM.render(
+    <ApolloProvider client={client}>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </ApolloProvider>,
+    document.getElementById('root'),
+  );
+});
 
 if (process.env.NODE_ENV === 'production') {
   if ('serviceWorker' in navigator) {

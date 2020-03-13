@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink, split } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
+import { RetryLink } from 'apollo-link-retry';
 import { WebSocketLink } from 'apollo-link-ws';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -23,6 +24,8 @@ cache.writeData({
     isLoggedIn: true, // presume logged in
   },
 });
+
+const retryLink = new RetryLink({ attempts: { max: Infinity } });
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,
@@ -47,7 +50,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log('networkError', networkError);
 });
 
-const httpWithErrorLink = ApolloLink.from([errorLink, httpLink]);
+const httpWithErrorLink = ApolloLink.from([
+  retryLink,
+  errorLink,
+  httpLink,
+]);
 
 const wsLink = new WebSocketLink({
   uri: `${process.env.REACT_APP_WS_ORIGIN}/graphql`,

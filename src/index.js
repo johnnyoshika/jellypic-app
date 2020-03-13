@@ -25,7 +25,19 @@ cache.writeData({
   },
 });
 
-const retryLink = new RetryLink({ attempts: { max: Infinity } });
+const retryLink = new RetryLink({
+  attempts: {
+    max: 5,
+    retryIf: (error, operation) => {
+      const definition = getMainDefinition(operation.query);
+      return (
+        !!error &&
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'mutation'
+      );
+    },
+  },
+});
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,

@@ -28,14 +28,6 @@ cache.writeData({
 const retryLink = new RetryLink({
   attempts: {
     max: 5,
-    retryIf: (error, operation) => {
-      const definition = getMainDefinition(operation.query);
-      return (
-        !!error &&
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'mutation'
-      );
-    },
   },
 });
 

@@ -51,4 +51,5 @@ Project was bootstrapped with [Create React App](https://github.com/facebookincu
 * Now our Samsung S7 device can run our app with url `http://localhost:3000`
 
 ## Deployment
-Coming soon...
+* Push to master and this app will automatically be deployed to Netlify
+* Available here: https://jellypic.koopla.com/

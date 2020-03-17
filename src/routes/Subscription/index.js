@@ -54,6 +54,7 @@ const Subscription = () => {
       setErrorResult(error.message);
     },
     onCompleted: data => {
+      setEndpoint(data.addSubscription.subscription.endpoint);
       setResult('subscribed');
     },
   });

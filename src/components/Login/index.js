@@ -6,8 +6,8 @@ import { USER_FRAGMENT } from 'schema/fragments';
 import LoginForm from './LoginForm';
 
 const LOGIN_USER = gql`
-  mutation login($accessToken: String!) {
-    login(input: { accessToken: $accessToken }) {
+  mutation login($token: String!) {
+    login(input: { token: $token }) {
       me {
         ...user
       }

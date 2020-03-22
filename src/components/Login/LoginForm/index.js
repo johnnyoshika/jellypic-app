@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { signIn, checkSession } from '../Auth';
+import useAuth0 from 'hooks/useAuth0';
 import Error from 'components/Error';
 
 import './style.css';
@@ -7,6 +7,7 @@ import './style.css';
 const LoginForm = ({ login, loading, error }) => {
   const [loginErrorMessage, setLoginErrorMessage] = useState(null);
   const [checking, setChecking] = useState(true);
+  const { checkSession, signIn } = useAuth0();
 
   const memoizedCallback = useCallback(
     token => {
@@ -32,7 +33,7 @@ const LoginForm = ({ login, loading, error }) => {
         }
       },
     );
-  }, [memoizedCallback]);
+  }, [memoizedCallback, checkSession, signIn]);
 
   const handleLoginClick = () => {
     setChecking(true);

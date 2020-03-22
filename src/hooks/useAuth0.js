@@ -37,4 +37,8 @@ const signOut = () =>
     clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
   });
 
-export { signIn, signOut, checkSession };
+const useAuth0 = () => {
+  return { checkSession, signIn, signOut };
+};
+
+export default useAuth0;

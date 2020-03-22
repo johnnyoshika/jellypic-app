@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink, split } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
+import { setContext } from 'apollo-link-context';
 import { RetryLink } from 'apollo-link-retry';
 import { WebSocketLink } from 'apollo-link-ws';
 import { onError } from 'apollo-link-error';
@@ -22,7 +23,7 @@ import App from './App';
 const cache = new InMemoryCache();
 cache.writeData({
   data: {
-    isLoggedIn: true, // presume logged in
+    isLoggedIn: !!localStorage.getItem('auth-token'),
   },
 });
 
@@ -39,7 +40,16 @@ const retryLink = new RetryLink({
 
 const httpLink = new HttpLink({
   uri: `${process.env.REACT_APP_API_ORIGIN}/graphql`,
-  credentials: 'include',
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('auth-token');
+  return {
+    headers: {
+      ...headers,
+      Authorization: token || '',
+    },
+  };
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -63,6 +73,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const httpWithErrorLink = ApolloLink.from([
   retryLink,
   errorLink,
+  authLink,
   httpLink,
 ]);
 

@@ -8,6 +8,7 @@ import LoginForm from './LoginForm';
 const LOGIN_USER = gql`
   mutation login($token: String!) {
     login(input: { token: $token }) {
+      authToken
       me {
         ...user
       }
@@ -21,6 +22,7 @@ const Login = () => {
   const setMe = useSetMe();
   const [login, { loading, error }] = useMutation(LOGIN_USER, {
     onCompleted({ login }) {
+      localStorage.setItem('auth-token', login.authToken);
       setMe(login.me);
       client
         .resetStore()

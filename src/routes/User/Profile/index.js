@@ -1,11 +1,15 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_USER } from 'schema/queries';
+import { useMe } from 'context/user-context';
 import Stats from './Stats';
+import Logout from 'components/Logout';
 import Error from 'components/Error';
 import Loading from 'components/Loading';
 
 const Profile = ({ id }) => {
+  const me = useMe();
+
   const { data, loading, error, refetch } = useQuery(GET_USER, {
     variables: {
       id,
@@ -39,7 +43,9 @@ const Profile = ({ id }) => {
         />
       </div>
       <div className="profile-info">
-        <div className="profile-info-username">{user.username}</div>
+        <div className="profile-info-username">
+          {user.username} {me.id === user.id && <Logout />}
+        </div>
         <Stats id={id} />
         <div className="profile-info-name">
           <strong>

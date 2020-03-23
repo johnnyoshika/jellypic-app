@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import auth0 from 'auth0-js';
 
 const auth = new auth0.WebAuth({
@@ -9,27 +11,10 @@ const auth = new auth0.WebAuth({
   scope: 'openid profile',
 });
 
-const checkSession = () => {
-  // clean up Auth0's redirect hash
-  if (window.location.hash)
-    window.history.replaceState(
-      '',
-      document.title,
-      window.location.pathname + window.location.search,
-    );
-
-  return new Promise((resolve, reject) => {
-    auth.checkSession({}, (err, authResult) => {
-      if (err) return reject(err);
-      if (!authResult || !authResult.idToken)
-        return reject({ description: 'Error loggin in' });
-
-      resolve(authResult);
-    });
+const signIn = () =>
+  auth.authorize({
+    state: window.location.pathname,
   });
-};
-
-const signIn = () => auth.authorize();
 
 const signOut = () =>
   auth.logout({
@@ -38,6 +23,36 @@ const signOut = () =>
   });
 
 const useAuth0 = () => {
+  const history = useHistory();
+  const checkSession = useCallback(() => {
+    // clean up Auth0's redirect hash
+    if (window.location.hash) {
+      auth.parseHash(
+        { hash: window.location.hash },
+        (err, authResult) => {
+          if (authResult.state !== window.location.pathname)
+            history.replace(authResult.state);
+          else
+            window.history.replaceState(
+              '',
+              document.title,
+              window.location.pathname + window.location.search,
+            );
+        },
+      );
+    }
+
+    return new Promise((resolve, reject) => {
+      auth.checkSession({}, (err, authResult) => {
+        if (err) return reject(err);
+        if (!authResult || !authResult.idToken)
+          return reject({ description: 'Error loggin in' });
+
+        resolve(authResult);
+      });
+    });
+  }, [history]);
+
   return { checkSession, signIn, signOut };
 };
 

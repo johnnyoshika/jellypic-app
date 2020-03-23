@@ -22,18 +22,14 @@ const LoginForm = ({ login, loading, error }) => {
 
   useEffect(() => {
     checkSession().then(
-      authResult => {
-        memoizedCallback(authResult.idToken);
-      },
+      authResult => memoizedCallback(authResult.idToken),
       err => {
-        if (err.code === 'login_required') signIn();
-        else {
+        setChecking(false);
+        if (err.code !== 'login_required')
           setLoginErrorMessage(err.description);
-          setChecking(false);
-        }
       },
     );
-  }, [memoizedCallback, checkSession, signIn]);
+  }, [memoizedCallback, checkSession]);
 
   const handleLoginClick = () => {
     setChecking(true);

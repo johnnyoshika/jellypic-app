@@ -43,8 +43,8 @@ const Profile = ({ id }) => {
         />
       </div>
       <div className="profile-info">
-        <div className="profile-info-username">
-          {user.username} {me.id === user.id && <Logout />}
+        <div className="profile-info-nickname">
+          {user.nickname} {me.id === user.id && <Logout />}
         </div>
         <Stats id={id} />
         <div className="profile-info-name">

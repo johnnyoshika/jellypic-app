@@ -45,7 +45,7 @@ const Comment = ({ post, comment }) => {
     <div className="card-info-comment">
       <div className="card-info-comment-user pull-left">
         <Link to={'/users/' + comment.user.id}>
-          {comment.user.username}
+          {comment.user.nickname}
         </Link>
       </div>
       {me.id === comment.user.id && (

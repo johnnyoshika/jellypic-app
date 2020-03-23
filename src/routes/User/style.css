@@ -23,7 +23,7 @@
   grid-template-rows: 1fr 1fr 1fr;
   align-items: center;
 }
-.profile-info-username {
+.profile-info-nickname {
   font-size: 30px;
 }
 .profile-info-social-stats {
@@ -52,7 +52,7 @@
 }
 
 @media (max-width: 735px) {
-  .profile-info-username {
+  .profile-info-nickname {
     font-size: 24px;
   }
   .profile-info-social-stats {

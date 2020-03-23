@@ -113,13 +113,13 @@ const Card = ({ post }) => {
           <div className="card-heading-user-image">
             <img
               src={post.user.thumbUrl}
-              alt={post.user.username}
+              alt={post.user.nickname}
               crossOrigin="anonymous"
             />
           </div>
           <div className="card-heading-user-name">
             <Link to={'/users/' + post.user.id}>
-              {post.user.username}
+              {post.user.nickname}
             </Link>
           </div>
         </div>

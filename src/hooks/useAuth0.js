@@ -10,16 +10,16 @@ const auth = new auth0.WebAuth({
 });
 
 const checkSession = () => {
+  // clean up Auth0's redirect hash
+  if (window.location.hash)
+    window.history.replaceState(
+      '',
+      document.title,
+      window.location.pathname + window.location.search,
+    );
+
   return new Promise((resolve, reject) => {
     auth.checkSession({}, (err, authResult) => {
-      // clean up Auth0's redirect hash
-      if (window.location.hash)
-        window.history.replaceState(
-          '',
-          document.title,
-          window.location.pathname + window.location.search,
-        );
-
       if (err) return reject(err);
       if (!authResult || !authResult.idToken)
         return reject({ description: 'Error loggin in' });

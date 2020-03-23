@@ -1,4 +1,4 @@
-# Jellypic Client
+# Jellypic App
 
 Jellypic is a sample app to demonstrate the capabilities of Progressive Web Apps, including:
 * Offline first readonly in:

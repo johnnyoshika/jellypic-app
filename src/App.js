@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
@@ -23,11 +24,20 @@ const IS_LOGGED_IN = gql`
 const App = () => {
   const { data } = useQuery(IS_LOGGED_IN);
   const me = useMe();
-  if (!data) return <Loading />;
 
-  if (!data.isLoggedIn) return <Login />;
-
-  return me ? <Dashboard /> : <Session />;
+  return (
+    <Router>
+      {!data ? (
+        <Loading />
+      ) : !data.isLoggedIn ? (
+        <Login />
+      ) : me ? (
+        <Dashboard />
+      ) : (
+        <Session />
+      )}
+    </Router>
+  );
 };
 
 export default App;

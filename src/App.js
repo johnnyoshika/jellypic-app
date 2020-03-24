@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { useMe } from 'context/user-context';
-import Loading from 'components/Loading';
 import Login from 'components/Login';
 import Session from 'components/Session';
 import Dashboard from 'routes';
@@ -27,9 +26,7 @@ const App = () => {
 
   return (
     <Router>
-      {!data ? (
-        <Loading />
-      ) : !data.isLoggedIn ? (
+      {!data || !data.isLoggedIn ? (
         <Login />
       ) : me ? (
         <Dashboard />

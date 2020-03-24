@@ -15,16 +15,20 @@ const Logout = () => {
     e.preventDefault();
     client.clearStore().then(() => {
       localStorage.removeItem('auth-token');
-      persistor.purge().then(
-        () => signOut(),
-        () => {
-          // Wipe out 'apollo-cache-persist' as a last resort b/c clearStore assigns {} to 'apollo-cache-persist' localStorage
-          // and leave our cache in a unusable state: https://github.com/apollographql/apollo-cache-persist/issues/126#issuecomment-602725578
-          // Apollo 3.x will fix this: https://github.com/apollographql/apollo-cache-persist/issues/126#issuecomment-602723222
+
+      // We need to purge persistor after clearing the cache store, otherwise our localStorage 'apollo-cache-persist' will be left as {} by clearStore(),
+      // which is an invalid state: https://github.com/apollographql/apollo-cache-persist/issues/126#issuecomment-602725578
+      // Apollo 3.x will fix this: https://github.com/apollographql/apollo-cache-persist/issues/126#issuecomment-602723222
+      persistor
+        .purge()
+        .catch(() => {
+          // Wipe out 'apollo-cache-persist' from localStorage as a last resort
           localStorage.removeItem('apollo-cache-persist');
+        })
+        .finally(() => {
+          client.writeData({ data: { isLoggedIn: false } });
           signOut();
-        },
-      );
+        });
     });
   };
 
